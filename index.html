@@ -23,6 +23,9 @@
   --fs-lede:  clamp(1.02rem, 1.22vw, 1.22rem);
   --fs-label: .72rem;
 
+  --bar:  10px;   /* bar inset from the viewport edge */
+  --barh: 72px;   /* bar height */
+
   --pad:  clamp(1.25rem, 4.4vw, 4.5rem);
   --band: clamp(4rem, 8vw, 8.5rem);
 }
@@ -78,23 +81,53 @@ canvas{display:block}
 .btn:hover{opacity:.82}
 .btn:active{transform:translateY(1px)}
 
-/* ---------------- nav ---------------- */
+/* ---------------- nav: translucent floating bar ---------------- */
 .nav{
-  position:sticky; top:0; z-index:40; height:70px;
-  display:flex; align-items:center;
-  background:var(--ink); color:var(--surface);
-  border-bottom:1px solid rgba(239,239,239,.20);
+  position:fixed; top:var(--bar); left:var(--bar); right:var(--bar); z-index:50;
+  height:var(--barh); display:flex; align-items:center; gap:16px; padding-inline:16px;
+  background:rgba(30,31,43,.55);
+  backdrop-filter:blur(14px) saturate(1.2);
+  -webkit-backdrop-filter:blur(14px) saturate(1.2);
+  border:1px solid rgba(239,239,239,.22);
+  color:var(--surface);
 }
-.nav .wrap{display:flex; align-items:center; gap:2.4rem; width:100%}
 .brand{display:flex; align-items:center; gap:.6rem; margin-right:auto}
 .brand svg{width:24px; height:24px; flex:none}
 .brand b{font-size:1rem; font-weight:600; letter-spacing:-.025em}
-.navlinks{display:flex; gap:2.1rem; font-size:.9rem; white-space:nowrap; color:rgba(239,239,239,.72)}
-.navlinks a:hover{color:var(--surface)}
-.nav .btn{padding:.6rem 1.15rem; font-size:.86rem; background:var(--surface); color:var(--ink); border-color:var(--surface)}
+.nav .brand{gap:7px}
+.nav .brand svg{width:23px; height:23px}
+.nav .brand b{font-size:24px; font-weight:500; letter-spacing:-.015em; line-height:1}
+.nav .btn{
+  min-width:210px; height:40px; padding:0 24px; font-size:16px;
+  background:var(--surface); color:var(--ink); border-color:var(--surface);
+  transition:background .18s, color .18s;
+}
+.nav .btn:hover{background:transparent; color:var(--surface); opacity:1}
+
+/* search + menu, two cells sharing one border */
+.icons{display:flex; height:40px; border:1px solid var(--surface)}
+.icons > * + *{border-left:1px solid var(--surface)}
+.icons svg{width:19px; height:19px}
+.ibtn,.menu summary{
+  width:40px; height:100%; display:grid; place-items:center; cursor:pointer;
+  background:transparent; border:0; color:inherit; list-style:none;
+  transition:background .18s, color .18s;
+}
+.menu summary::-webkit-details-marker{display:none}
+.ibtn:hover,.menu summary:hover,.menu[open] summary{background:var(--surface); color:var(--ink)}
+.menu{position:relative}
+.menu .panel{
+  position:absolute; top:calc(100% + 17px); right:-1px; min-width:250px; display:grid;
+  background:rgba(30,31,43,.82);
+  backdrop-filter:blur(14px) saturate(1.2); -webkit-backdrop-filter:blur(14px) saturate(1.2);
+  border:1px solid rgba(239,239,239,.22);
+}
+.menu .panel a{padding:.95rem 1.2rem; font-size:.95rem; border-top:1px solid rgba(239,239,239,.11)}
+.menu .panel a:first-child{border-top:0}
+.menu .panel a:hover{background:rgba(239,239,239,.09)}
 
 /* ---------------- hero ---------------- */
-.hero{padding-top:clamp(3.2rem,6vw,6rem)}
+.hero{padding-top:calc(var(--bar) + var(--barh) + clamp(3.2rem,6vw,6rem))}
 .hero h1{font-size:var(--fs-hero); line-height:.91; letter-spacing:-.042em; max-width:14ch}
 .hero .sub{
   display:flex; flex-wrap:wrap; align-items:end; justify-content:space-between;
@@ -221,13 +254,16 @@ footer .legal{font-size:var(--fs-label); text-transform:uppercase; letter-spacin
   .figs > div:nth-child(n+3){border-top:1px solid var(--hair)}
 }
 @media (max-width:760px){
-  .navlinks{display:none}
   .plate canvas{aspect-ratio:760/570}
   .row,.ticks{grid-template-columns:1fr; gap:.6rem}
   .row .val{text-align:left}
   .ticks u{grid-column:1}
   .comp div{grid-template-columns:1fr; gap:.4rem}
   .hero .sub{align-items:start}
+}
+@media (max-width:640px){
+  .nav .btn{min-width:0; padding:0 16px; font-size:15px}
+  .nav .brand b{font-size:20px}
 }
 @media (max-width:520px){
   .streams,.sites,.figs{grid-template-columns:1fr}
@@ -239,22 +275,37 @@ footer .legal{font-size:var(--fs-label); text-transform:uppercase; letter-spacin
 
 <!-- ============================= NAV ============================= -->
 <nav class="nav">
-  <div class="wrap">
-    <a class="brand" href="#top" aria-label="Solare Source home">
-      <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
-        <rect x="3"  y="5"  width="30" height="8" fill="currentColor"/>
-        <rect x="10" y="16" width="30" height="8" fill="currentColor" opacity=".55"/>
-        <rect x="0"  y="27" width="30" height="8" fill="currentColor"/>
+  <a class="brand" href="#top" aria-label="Solare Source home">
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="4.5" aria-hidden="true">
+        <circle cx="20" cy="20" r="15.25"/>
+        <path d="M11 17 20 24 29 17" stroke-linejoin="miter"/>
       </svg>
-      <b>Solare Source</b>
-    </a>
-    <div class="navlinks">
-      <a href="#technology">Technology</a>
-      <a href="#materials">Materials</a>
-      <a href="#network">Network</a>
-      <a href="#compliance">Compliance</a>
-    </div>
-    <a class="btn" href="#book">Book a collection</a>
+    <b>Solare Source</b>
+  </a>
+
+  <a class="btn" href="#book">Book a collection</a>
+
+  <div class="icons">
+    <!-- ponytail: search is a stub until there is something to search -->
+    <button class="ibtn" type="button" aria-label="Search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+        <circle cx="11" cy="10" r="6.2"/><path d="M7.2 14.6 3.4 20.6"/>
+      </svg>
+    </button>
+    <details class="menu">
+      <summary aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+          <path d="M3 6.5h18M3 12h18M3 17.5h18"/>
+        </svg>
+      </summary>
+      <div class="panel">
+        <a href="#technology">Technology</a>
+        <a href="#materials">Materials</a>
+        <a href="#network">Network</a>
+        <a href="#compliance">Compliance</a>
+        <a href="#book">Contact</a>
+      </div>
+    </details>
   </div>
 </nav>
 
@@ -498,10 +549,9 @@ footer .legal{font-size:var(--fs-label); text-transform:uppercase; letter-spacin
 <footer>
   <div class="wrap">
     <a class="brand" href="#top" aria-label="Solare Source home">
-      <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
-        <rect x="3"  y="5"  width="30" height="8" fill="currentColor"/>
-        <rect x="10" y="16" width="30" height="8" fill="currentColor" opacity=".55"/>
-        <rect x="0"  y="27" width="30" height="8" fill="currentColor"/>
+      <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="4.5" aria-hidden="true">
+        <circle cx="20" cy="20" r="15.25"/>
+        <path d="M11 17 20 24 29 17" stroke-linejoin="miter"/>
       </svg>
       <b>Solare Source</b>
     </a>
@@ -511,6 +561,10 @@ footer .legal{font-size:var(--fs-label); text-transform:uppercase; letter-spacin
 
 <script>
 document.documentElement.classList.add('js');
+
+const menu = document.querySelector('.menu');
+addEventListener('click', e => { if (menu && !menu.contains(e.target)) menu.open = false; });
+addEventListener('keydown', e => { if (e.key === 'Escape' && menu) menu.open = false; });
 
 const io = new IntersectionObserver((entries) => {
   for (const e of entries) {

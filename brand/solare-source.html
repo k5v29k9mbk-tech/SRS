@@ -1,0 +1,648 @@
+<title>Solare Source</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap">
+
+<style>
+/* ==========================================================================
+   SOLARE SOURCE (SRS)
+   Built to the Palantir visual system: ink #1E1F2B / surface #EFEFEF,
+   surfaces alternating near-black and white down the page, flat planar
+   fills (no gradient, no shadow, no texture), 1px hairline rules,
+   0px radius everywhere, oversized display type as the only visual driver.
+   Type: Alliance No 1 / No 2 is the licensed face. Archivo stands in here
+   as the closest neo-grotesk available to a web font host.
+   ========================================================================== */
+:root{
+  --ink:     #1E1F2B;
+  --surface: #EFEFEF;
+
+  --fs-hero:  clamp(3.1rem, 8.6vw, 8.2rem);
+  --fs-h2:    clamp(2.2rem, 4.6vw, 4.1rem);
+  --fs-h3:    clamp(1.15rem, 1.5vw, 1.4rem);
+  --fs-lede:  clamp(1.02rem, 1.22vw, 1.22rem);
+  --fs-label: .72rem;
+
+  --pad:  clamp(1.25rem, 4.4vw, 4.5rem);
+  --band: clamp(4rem, 8vw, 8.5rem);
+}
+
+/* The two surfaces. Every colour on the page resolves through these,
+   so a section flips its whole palette by swapping one class. */
+.dark{
+  --bg:var(--ink); --fg:var(--surface);
+  --fg2:rgba(239,239,239,.64); --fg3:rgba(239,239,239,.44);
+  --hair:rgba(239,239,239,.20); --hair2:rgba(239,239,239,.11);
+  --btn-bg:var(--surface); --btn-fg:var(--ink);
+}
+.light{
+  --bg:var(--surface); --fg:var(--ink);
+  --fg2:rgba(30,31,43,.68); --fg3:rgba(30,31,43,.48);
+  --hair:rgba(30,31,43,.20); --hair2:rgba(30,31,43,.11);
+  --btn-bg:var(--ink); --btn-fg:var(--surface);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ink); color:var(--surface);
+  font-family:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size:1rem; line-height:1.5; -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+section{background:var(--bg); color:var(--fg)}
+h1,h2,h3{margin:0; font-weight:600; letter-spacing:-.035em; line-height:.96; text-wrap:balance}
+p{margin:0}
+a{color:inherit; text-decoration:none}
+canvas{display:block}
+:focus-visible{outline:2px solid currentColor; outline-offset:3px}
+
+.wrap{max-width:1560px; margin:0 auto; padding-inline:var(--pad)}
+.band{padding-block:var(--band)}
+.label{font-size:var(--fs-label); text-transform:uppercase; letter-spacing:.14em; font-weight:500; color:var(--fg3)}
+.lede{font-size:var(--fs-lede); color:var(--fg2); max-width:52ch; line-height:1.44}
+.num{font-variant-numeric:tabular-nums}
+
+/* arrow link: the site's only secondary action, per the system */
+.alink{
+  display:inline-flex; align-items:center; gap:.7rem;
+  font-size:.95rem; font-weight:500; padding-bottom:.4rem;
+  border-bottom:1px solid var(--fg); transition:gap .18s;
+}
+.alink:hover{gap:1.1rem}
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; white-space:nowrap;
+  font-size:.92rem; font-weight:500; padding:.85rem 1.6rem; border-radius:0;
+  background:var(--btn-bg); color:var(--btn-fg); border:1px solid var(--btn-bg);
+  transition:opacity .18s;
+}
+.btn:hover{opacity:.82}
+.btn:active{transform:translateY(1px)}
+
+/* ---------------- nav ---------------- */
+.nav{
+  position:sticky; top:0; z-index:40; height:70px;
+  display:flex; align-items:center;
+  background:var(--ink); color:var(--surface);
+  border-bottom:1px solid rgba(239,239,239,.20);
+}
+.nav .wrap{display:flex; align-items:center; gap:2.4rem; width:100%}
+.brand{display:flex; align-items:center; gap:.6rem; margin-right:auto}
+.brand svg{width:24px; height:24px; flex:none}
+.brand b{font-size:1rem; font-weight:600; letter-spacing:-.025em}
+.navlinks{display:flex; gap:2.1rem; font-size:.9rem; white-space:nowrap; color:rgba(239,239,239,.72)}
+.navlinks a:hover{color:var(--surface)}
+.nav .btn{padding:.6rem 1.15rem; font-size:.86rem; background:var(--surface); color:var(--ink); border-color:var(--surface)}
+
+/* ---------------- hero ---------------- */
+.hero{padding-top:clamp(3.2rem,6vw,6rem)}
+.hero h1{font-size:var(--fs-hero); line-height:.91; letter-spacing:-.042em; max-width:14ch}
+.hero .sub{
+  display:flex; flex-wrap:wrap; align-items:end; justify-content:space-between;
+  gap:2rem 3rem; margin-top:clamp(2.4rem,4vw,3.6rem);
+  padding-bottom:clamp(2.6rem,4.5vw,4rem);
+}
+.hero .acts{display:flex; flex-wrap:wrap; gap:1rem 1.6rem; align-items:center}
+
+/* full-bleed media band: the drawing runs edge to edge under the type */
+.plate{position:relative; border-top:1px solid var(--hair); background:#191A23}
+.plate canvas{width:100%; aspect-ratio:1440/630}
+.plate video{position:absolute; inset:0; width:100%; height:100%; object-fit:cover}
+.plate .cap{
+  display:flex; justify-content:space-between; gap:1rem;
+  padding:.95rem var(--pad); border-top:1px solid var(--hair);
+  font-size:var(--fs-label); text-transform:uppercase; letter-spacing:.14em; color:var(--fg3);
+}
+
+/* ---------------- figures ---------------- */
+.figs{display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--hair)}
+.figs > div{padding:clamp(2.2rem,3.4vw,3.4rem) clamp(1.3rem,2vw,2.4rem); border-left:1px solid var(--hair)}
+.figs > div:first-child{border-left:0; padding-left:0}
+.figs dt{margin-bottom:1.6rem}
+.figs dd{margin:0; font-size:clamp(2.6rem,5vw,4.6rem); font-weight:600; letter-spacing:-.05em; line-height:.88}
+.figs small{display:block; margin-top:1rem; font-size:.86rem; color:var(--fg2); line-height:1.4}
+
+/* ---------------- section head ---------------- */
+.head{display:grid; gap:1.6rem; max-width:70ch}
+.head h2{font-size:var(--fs-h2)}
+
+/* ---------------- streams ---------------- */
+.streams{display:grid; grid-template-columns:repeat(5,1fr); margin-top:clamp(3rem,5vw,5rem); border-top:1px solid var(--hair)}
+.stream{padding:2rem 1.5rem 2.2rem 0; border-left:1px solid var(--hair); padding-left:1.5rem; display:flex; flex-direction:column; gap:.8rem; min-height:260px}
+.stream:first-child{border-left:0; padding-left:0}
+.stream .sym{font-size:1.5rem; font-weight:600; letter-spacing:-.03em; color:var(--fg3)}
+.stream h3{font-size:var(--fs-h3)}
+.stream p{font-size:.88rem; color:var(--fg2); line-height:1.45}
+.stream .out{margin-top:auto; padding-top:1.4rem; border-top:1px solid var(--hair2); font-size:var(--fs-label); text-transform:uppercase; letter-spacing:.13em; color:var(--fg3)}
+
+/* ---------------- stages ---------------- */
+.stages{display:grid; grid-template-columns:repeat(3,1fr); margin-top:clamp(3rem,5vw,5rem); border-top:1px solid var(--hair)}
+.stage{padding:2.4rem 2rem 0 2rem; border-left:1px solid var(--hair)}
+.stage:first-child{border-left:0; padding-left:0}
+.stage h3{font-size:clamp(1.5rem,2.4vw,2.1rem); margin:1.6rem 0 1rem}
+.stage p{font-size:.95rem; color:var(--fg2)}
+
+/* ---------------- exclusions ---------------- */
+.excl{display:grid; grid-template-columns:repeat(3,1fr); margin-top:clamp(3rem,5vw,5rem); border-top:1px solid var(--hair)}
+.excl div{padding:1.9rem 1.5rem 2rem; border-left:1px solid var(--hair); border-bottom:1px solid var(--hair); display:flex; align-items:baseline; gap:1.1rem}
+.excl div:nth-child(3n+1){border-left:0; padding-left:0}
+.excl b{font-size:clamp(1.15rem,1.7vw,1.5rem); font-weight:500; letter-spacing:-.02em}
+.excl .i{font-size:var(--fs-label); color:var(--fg3); letter-spacing:.12em}
+.excl-note{margin-top:clamp(2.6rem,4vw,3.6rem); font-size:var(--fs-lede); color:var(--fg2); max-width:58ch; line-height:1.44}
+
+/* ---------------- chart ---------------- */
+.chart{margin-top:clamp(3rem,5vw,5rem); display:grid; gap:1.7rem}
+.row{display:grid; grid-template-columns:180px 1fr 132px; align-items:center; gap:1.6rem}
+.row .lab{font-size:1rem; font-weight:500}
+.track{position:relative; height:30px}
+.bar{position:absolute; left:0; top:0; height:30px; transform-origin:left center}
+.bar.proj{background:var(--fg); z-index:1}
+.bar.now{background:var(--bg); border:1px solid var(--fg); z-index:2}
+.row .val{font-size:.88rem; color:var(--fg2); text-align:right}
+.ticks{display:grid; grid-template-columns:180px 1fr 132px; gap:1.6rem; padding-top:.6rem; border-top:1px solid var(--hair)}
+.ticks u{grid-column:2; display:flex; justify-content:space-between; text-decoration:none; font-size:var(--fs-label); letter-spacing:.12em; color:var(--fg3)}
+.key{display:flex; gap:2rem; flex-wrap:wrap; margin-top:2.2rem; font-size:var(--fs-label); text-transform:uppercase; letter-spacing:.13em; color:var(--fg3)}
+.key i{display:inline-block; width:22px; height:10px; margin-right:.6rem}
+
+/* ---------------- sites ---------------- */
+.sites{display:grid; grid-template-columns:repeat(5,1fr); margin-top:clamp(3rem,5vw,5rem); border-top:1px solid var(--hair)}
+.site{padding:2rem 1.5rem 2.2rem; border-left:1px solid var(--hair); display:flex; flex-direction:column; gap:.4rem; min-height:210px}
+.site:first-child{border-left:0; padding-left:0}
+.site b{font-size:clamp(1.15rem,1.6vw,1.45rem); font-weight:500; letter-spacing:-.025em; margin-top:1.1rem}
+.site em{font-style:normal; font-size:.88rem; color:var(--fg2)}
+.site .kind{margin-top:auto; padding-top:1.4rem; border-top:1px solid var(--hair2); font-size:var(--fs-label); text-transform:uppercase; letter-spacing:.13em; color:var(--fg3)}
+.state{align-self:flex-start; font-size:var(--fs-label); text-transform:uppercase; letter-spacing:.13em; padding:.32rem .6rem; border:1px solid var(--hair)}
+.state.on{background:var(--fg); color:var(--bg); border-color:var(--fg)}
+.state.off{color:var(--fg3)}
+
+/* ---------------- compliance ---------------- */
+.comp{margin-top:clamp(3rem,5vw,5rem); border-top:1px solid var(--hair)}
+.comp div{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.35fr); gap:1rem 3rem; padding:1.7rem 0; border-bottom:1px solid var(--hair2)}
+.comp b{font-size:clamp(1.02rem,1.35vw,1.22rem); font-weight:500; letter-spacing:-.015em}
+.comp span{font-size:.95rem; color:var(--fg2)}
+
+/* ---------------- close + footer ---------------- */
+.close h2{font-size:var(--fs-h2); max-width:18ch}
+.close .acts{display:flex; flex-wrap:wrap; gap:1rem 1.7rem; align-items:center; margin-top:clamp(2.2rem,3.4vw,3rem)}
+.close .meta{display:grid; gap:.5rem; margin-top:clamp(3rem,5vw,4.5rem); padding-top:2rem; border-top:1px solid var(--hair); font-size:.92rem; color:var(--fg2)}
+.close .meta a:hover{color:var(--fg)}
+footer{background:var(--ink); color:var(--surface); border-top:1px solid rgba(239,239,239,.20); padding-block:2.2rem 2.8rem}
+footer .wrap{display:flex; flex-wrap:wrap; gap:1.2rem 2.4rem; align-items:center; justify-content:space-between}
+footer .legal{font-size:var(--fs-label); text-transform:uppercase; letter-spacing:.13em; color:rgba(239,239,239,.44)}
+
+/* ---------------- motion: resting state visible, JS opts in ---------------- */
+.js .rv{opacity:0; transform:translateY(16px)}
+.js .rv.in{opacity:1; transform:none; transition:opacity .65s cubic-bezier(.16,1,.3,1), transform .65s cubic-bezier(.16,1,.3,1)}
+.js .hline{display:block; overflow:hidden}
+.js .hline > i{display:block; font-style:normal; transform:translateY(104%); animation:rise .95s cubic-bezier(.16,1,.3,1) forwards}
+.js .hline:nth-of-type(2) > i{animation-delay:.08s}
+@keyframes rise{to{transform:none}}
+.js .bar{transform:scaleX(0); transition:transform .9s cubic-bezier(.16,1,.3,1)}
+.js .chart.in .bar{transform:scaleX(1)}
+.js .chart.in .bar.now{transition-delay:.2s}
+.hline > i{display:block; font-style:normal}
+@media (prefers-reduced-motion:reduce){
+  .js .rv,.js .rv.in{opacity:1; transform:none; transition:none}
+  .js .hline > i{transform:none; animation:none}
+  .js .bar,.js .chart.in .bar{transform:scaleX(1); transition:none}
+}
+
+/* ---------------- responsive ---------------- */
+@media (max-width:1100px){
+  .streams,.sites{grid-template-columns:repeat(2,1fr)}
+  .stream,.site{border-left:1px solid var(--hair); border-bottom:1px solid var(--hair); padding-left:1.5rem; min-height:0}
+  .stream:nth-child(odd),.site:nth-child(odd){border-left:0; padding-left:0}
+  .stages,.excl{grid-template-columns:1fr}
+  .stage{border-left:0; border-top:1px solid var(--hair); padding:2.2rem 0 0}
+  .stage:first-child{border-top:0}
+  .excl div{border-left:0; padding-left:0}
+  .figs{grid-template-columns:repeat(2,1fr)}
+  .figs > div{border-left:1px solid var(--hair); padding-left:clamp(1.3rem,2vw,2.4rem)}
+  .figs > div:nth-child(odd){border-left:0; padding-left:0}
+  .figs > div:nth-child(n+3){border-top:1px solid var(--hair)}
+}
+@media (max-width:760px){
+  .navlinks{display:none}
+  .plate canvas{aspect-ratio:760/570}
+  .row,.ticks{grid-template-columns:1fr; gap:.6rem}
+  .row .val{text-align:left}
+  .ticks u{grid-column:1}
+  .comp div{grid-template-columns:1fr; gap:.4rem}
+  .hero .sub{align-items:start}
+}
+@media (max-width:520px){
+  .streams,.sites,.figs{grid-template-columns:1fr}
+  .stream,.site,.figs > div{border-left:0; padding-left:0}
+  .figs > div{border-top:1px solid var(--hair)}
+  .figs > div:first-child{border-top:0}
+}
+</style>
+
+<!-- ============================= NAV ============================= -->
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Solare Source home">
+      <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <rect x="3"  y="5"  width="30" height="8" fill="currentColor"/>
+        <rect x="10" y="16" width="30" height="8" fill="currentColor" opacity=".55"/>
+        <rect x="0"  y="27" width="30" height="8" fill="currentColor"/>
+      </svg>
+      <b>Solare Source</b>
+    </a>
+    <div class="navlinks">
+      <a href="#technology">Technology</a>
+      <a href="#materials">Materials</a>
+      <a href="#network">Network</a>
+      <a href="#compliance">Compliance</a>
+    </div>
+    <a class="btn" href="#book">Book a collection</a>
+  </div>
+</nav>
+
+<!-- ============================= HERO ============================= -->
+<section class="dark hero" id="top">
+  <div class="wrap">
+    <h1>
+      <span class="hline"><i>Nothing goes</i></span>
+      <span class="hline"><i>to landfill.</i></span>
+    </h1>
+    <div class="sub">
+      <p class="lede">We recover 99+% of every end-of-life solar panel into five clean material streams. No shredding, no pyrolysis, no landfill.</p>
+      <div class="acts">
+        <a class="btn" href="#book">Book a collection</a>
+        <a class="alink" href="#technology">See the process <span aria-hidden="true">&#8594;</span></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Luno Studio slot: add <video autoplay muted loop playsinline src="hero.mp4">
+       inside .plate and it composites over the drawing. -->
+  <div class="plate">
+    <canvas id="lam" role="img"
+      aria-label="Exploded isometric view of a photovoltaic laminate separating into five layers: aluminium frame, glass front sheet, silicon cells, copper busbar ribbon and polymer backsheet."></canvas>
+    <div class="cap"><span>Laminate, separated</span><span>Five recovered streams</span></div>
+  </div>
+</section>
+
+<!-- ============================= FIGURES ============================= -->
+<section class="light">
+  <div class="wrap band" style="padding-block:0">
+    <dl class="figs rv" style="border-top:0">
+      <div>
+        <dt class="label">Material recovery</dt>
+        <dd class="num">99+%</dd>
+        <small>Of every panel processed, by mass</small>
+      </div>
+      <div>
+        <dt class="label">Clean streams out</dt>
+        <dd class="num">5</dd>
+        <small>Silicon, aluminium, copper, glass, plastic</small>
+      </div>
+      <div>
+        <dt class="label">Technology lineage</dt>
+        <dd class="num">12 yrs</dd>
+        <small>Proven in the European market with LME</small>
+      </div>
+      <div>
+        <dt class="label">Thermal or chemical steps</dt>
+        <dd class="num">0</dd>
+        <small>No pyrolysis, no shredding, no leaching</small>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<!-- ============================= MATERIALS ============================= -->
+<section class="dark" id="materials">
+  <div class="wrap band">
+    <div class="head rv">
+      <p class="label">Materials</p>
+      <h2>One panel in. Five streams out.</h2>
+      <p class="lede">A panel is a laminate, not a mixture. Separated rather than destroyed, every layer leaves the line clean enough to sell back into industry.</p>
+    </div>
+
+    <div class="streams rv">
+      <article class="stream">
+        <span class="sym">Si</span>
+        <h3>Silicon</h3>
+        <p>The cell wafer, lifted intact from the laminate instead of milled into cullet. The highest-value fraction of the panel, and the one conventional recycling destroys first.</p>
+        <span class="out">Wafer fragment</span>
+      </article>
+      <article class="stream">
+        <span class="sym">Al</span>
+        <h3>Aluminium</h3>
+        <p>Frame extrusion, removed by the deframing machine before anything else is touched.</p>
+        <span class="out">Baled, furnace-ready</span>
+      </article>
+      <article class="stream">
+        <span class="sym">Cu</span>
+        <h3>Copper</h3>
+        <p>Busbar ribbon, junction box tails and cable, sorted out by the robotic disassembly cell.</p>
+        <span class="out">Sorted bright wire</span>
+      </article>
+      <article class="stream">
+        <span class="sym">SiO&#8322;</span>
+        <h3>Glass</h3>
+        <p>Front sheet, kept as a clean stream rather than a contaminated mixed cullet.</p>
+        <span class="out">Delaminated sheet</span>
+      </article>
+      <article class="stream">
+        <span class="sym">Poly</span>
+        <h3>Plastic</h3>
+        <p>Backsheet and encapsulant polymers, separated and packed for downstream processors.</p>
+        <span class="out">Packed by polymer</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= STAGES ============================= -->
+<section class="light" id="technology">
+  <div class="wrap band">
+    <div class="head rv">
+      <h2>The line runs in three stages.</h2>
+      <p class="lede">Clean technology built by LME specifically to process end-of-life PV, operating in Europe for twelve years before it reached Queensland.</p>
+    </div>
+
+    <div class="stages rv">
+      <div class="stage">
+        <p class="label">Stage 01</p>
+        <h3>Deframing</h3>
+        <p>A mechatronic machine separates the aluminium frame, junction box and cables from the panel. Nothing is cut, pried or hammered, so the laminate reaches the next stage undamaged.</p>
+      </div>
+      <div class="stage">
+        <p class="label">Stage 02</p>
+        <h3>Automated disassembly</h3>
+        <p>Robotics complete the disassembly and split the laminate into its constituent materials. No operator handles a panel, which is what keeps the streams clean and the site safe.</p>
+      </div>
+      <div class="stage">
+        <p class="label">Stage 03</p>
+        <h3>Materials processing</h3>
+        <p>Each recovered material is processed, separated and automatically packed, ready to re-enter a different industry sector. Chain of custody records follow every pallet.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= EXCLUSIONS ============================= -->
+<section class="dark">
+  <div class="wrap band">
+    <div class="head rv">
+      <h2>Six things this plant does not do.</h2>
+      <p class="lede">Most PV recycling is a demolition process wearing a green label. The recovery rate is decided by what you refuse to use.</p>
+    </div>
+
+    <div class="excl rv">
+      <div><span class="i">01</span><b>Manual dismantling</b></div>
+      <div><span class="i">02</span><b>Shredding</b></div>
+      <div><span class="i">03</span><b>Crushing</b></div>
+      <div><span class="i">04</span><b>Pyrolysis</b></div>
+      <div><span class="i">05</span><b>Thermal treatment</b></div>
+      <div><span class="i">06</span><b>Hydrometallurgy</b></div>
+    </div>
+    <p class="excl-note rv">Every one of those methods mixes the streams it is trying to recover. Shred a panel and the silicon ends up in the glass. Burn it and the polymers become an air-quality problem. Separation is slower to engineer and it is the only route to 99+%.</p>
+  </div>
+</section>
+
+<!-- ============================= SCALE ============================= -->
+<section class="light">
+  <div class="wrap band">
+    <div class="head rv">
+      <h2>The wave has not arrived yet.</h2>
+      <p class="lede">Australia's installed base by segment, today against 2030. Solar farms alone move from 31 million panels to 193 million.</p>
+    </div>
+
+    <!-- Bars drawn to one scale: 0 to 200 million panels. -->
+    <div class="chart rv">
+      <div class="row">
+        <span class="lab">Solar farm</span>
+        <span class="track"><span class="bar proj" style="width:96.5%"></span><span class="bar now" style="width:15.5%"></span></span>
+        <span class="val num">31 &#8594; 193 M</span>
+      </div>
+      <div class="row">
+        <span class="lab">Residential</span>
+        <span class="track"><span class="bar proj" style="width:25%"></span><span class="bar now" style="width:20%"></span></span>
+        <span class="val num">40 &#8594; 50 M</span>
+      </div>
+      <div class="row">
+        <span class="lab">Commercial</span>
+        <span class="track"><span class="bar proj" style="width:7.5%"></span><span class="bar now" style="width:4%"></span></span>
+        <span class="val num">8 &#8594; 15 M</span>
+      </div>
+      <div class="row">
+        <span class="lab">Industrial</span>
+        <span class="track"><span class="bar proj" style="width:4.5%"></span><span class="bar now" style="width:2.5%"></span></span>
+        <span class="val num">5 &#8594; 9 M</span>
+      </div>
+      <div class="ticks"><u class="num"><span>0</span><span>50M</span><span>100M</span><span>150M</span><span>200M</span></u></div>
+      <div class="key">
+        <span><i style="border:1px solid var(--fg)"></i>In service now</span>
+        <span><i style="background:var(--fg)"></i>Projected 2030</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= NETWORK ============================= -->
+<section class="dark" id="network">
+  <div class="wrap band">
+    <div class="head rv">
+      <p class="label">Recovery network</p>
+      <h2>Panels are heavy. The plant comes to the panels.</h2>
+      <p class="lede">Recovery centres are sized to the volume of their catchment, so a decommissioning job does not have to freight glass across the country to stay compliant.</p>
+    </div>
+
+    <div class="sites rv">
+      <div class="site"><span class="state on">Accepting</span><b>Biloela</b><em>Queensland</em><span class="kind">Recovery centre</span></div>
+      <div class="site"><span class="state on">Accepting</span><b>Townsville</b><em>Queensland</em><span class="kind">Recovery centre</span></div>
+      <div class="site"><span class="state off">In development</span><b>Southeast QLD</b><em>Queensland</em><span class="kind">Drop-off centre</span></div>
+      <div class="site"><span class="state off">In development</span><b>New South Wales</b><em>Catchment TBC</em><span class="kind">Drop-off centre</span></div>
+      <div class="site"><span class="state off">In development</span><b>Keilor Park</b><em>Victoria</em><span class="kind">Drop-off centre</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= COMPLIANCE ============================= -->
+<section class="light" id="compliance">
+  <div class="wrap band">
+    <div class="head rv">
+      <h2>Compliance is the deliverable.</h2>
+      <p class="lede">A certificate of sustainability and a chain of custody record for every panel, issued against the frameworks your auditor already reads.</p>
+    </div>
+    <div class="comp rv">
+      <div><b>EU WEEE Directive 2012/2019</b><span>The waste electrical and electronic equipment standard the process was engineered against</span></div>
+      <div><b>Environment Protection Act 2017 (Vic)</b><span>General environmental duty, discharged with documentation</span></div>
+      <div><b>National Waste Policy 2018</b><span>Landfill diversion and resource recovery targets</span></div>
+      <div><b>Victorian Circular Economy Policy 2020</b><span>Material back into productive use, not into a cell</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= CLOSE ============================= -->
+<section class="dark close" id="book">
+  <div class="wrap band">
+    <div class="rv">
+      <h2>Tell us what is coming off the roof.</h2>
+      <div class="acts">
+        <a class="btn" href="mailto:info@srcorp.com.au?subject=Collection%20enquiry">Book a collection</a>
+        <a class="alink" href="tel:+61477254152">Call +61 477 254 152 <span aria-hidden="true">&#8594;</span></a>
+      </div>
+      <div class="meta">
+        <span>Solare Source Pty Ltd</span>
+        <a href="mailto:info@srcorp.com.au">info@srcorp.com.au</a>
+        <span>29 Concorde Drive, Keilor Park VIC 3042</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Solare Source home">
+      <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <rect x="3"  y="5"  width="30" height="8" fill="currentColor"/>
+        <rect x="10" y="16" width="30" height="8" fill="currentColor" opacity=".55"/>
+        <rect x="0"  y="27" width="30" height="8" fill="currentColor"/>
+      </svg>
+      <b>Solare Source</b>
+    </a>
+    <span class="legal">ABN 84 647 327 044 &nbsp;&nbsp;/&nbsp;&nbsp; Australian owned &nbsp;&nbsp;/&nbsp;&nbsp; In partnership with LME</span>
+  </div>
+</footer>
+
+<script>
+document.documentElement.classList.add('js');
+
+const io = new IntersectionObserver((entries) => {
+  for (const e of entries) {
+    if (!e.isIntersecting) continue;
+    e.target.classList.add('in');
+    io.unobserve(e.target);
+  }
+}, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+document.querySelectorAll('.rv, .chart').forEach(el => io.observe(el));
+
+/* --------------------------------------------------------------------
+   Hero drawing: a PV laminate in exploded isometric, one plane per
+   recovered stream, separating on load. Monochrome, flat fills, hairline
+   strokes, no gradient or shadow, to sit inside the same visual system.
+-------------------------------------------------------------------- */
+(function () {
+  const cv = document.getElementById('lam');
+  if (!cv || !cv.getContext) return;
+  const ctx = cv.getContext('2d');
+
+  const W = 420, D = 260, C = 0.866, K = 0.42;
+  const WIDE   = { LW: 1440, OX: 483, OY: 172, EXP: 135, labels: true  };
+  const NARROW = { LW:  760, OX: 311, OY: 142, EXP: 105, labels: false };
+  let V = WIDE;
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // drawn bottom of stack upward, so upper planes occlude lower ones
+  const layers = [
+    { k:  1, th: 8, fill:'rgba(239,239,239,.05)', stroke:'rgba(239,239,239,.34)', sym:'Poly', name:'BACKSHEET' },
+    { k: .5, th: 3, fill:'rgba(239,239,239,.03)', stroke:'rgba(239,239,239,.40)', sym:'Cu',   name:'COPPER BUSBAR', ribbons:true },
+    { k:  0, th: 6, fill:'#101119',               stroke:'rgba(239,239,239,.34)', sym:'Si',   name:'SILICON CELLS', cells:true },
+    { k:-.5, th: 4, fill:'rgba(239,239,239,.07)', stroke:'rgba(239,239,239,.46)', sym:'SiO₂', name:'GLASS' },
+    { k: -1, th:10, fill:'rgba(239,239,239,.12)', stroke:'#EFEFEF',               sym:'Al',   name:'ALUMINIUM FRAME', frame:true }
+  ];
+
+  const P = (u, v, dy) => [V.OX + (u - v) * C, V.OY + (u + v) * K + dy];
+
+  function quad(u0, v0, u1, v1, dy) {
+    const a = P(u0,v0,dy), b = P(u1,v0,dy), c = P(u1,v1,dy), d = P(u0,v1,dy);
+    ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.lineTo(c[0],c[1]); ctx.lineTo(d[0],d[1]); ctx.closePath();
+  }
+
+  function plane(L, t) {
+    const dy = L.k * V.EXP * t;
+    const d2 = P(0,D,dy), c2 = P(W,D,dy), b = P(W,0,dy);
+
+    // the two thickness faces this projection exposes
+    ctx.beginPath();
+    ctx.moveTo(d2[0],d2[1]); ctx.lineTo(c2[0],c2[1]); ctx.lineTo(c2[0],c2[1]+L.th); ctx.lineTo(d2[0],d2[1]+L.th); ctx.closePath();
+    ctx.moveTo(c2[0],c2[1]); ctx.lineTo(b[0],b[1]);   ctx.lineTo(b[0],b[1]+L.th);   ctx.lineTo(c2[0],c2[1]+L.th); ctx.closePath();
+    ctx.fillStyle = '#191A23'; ctx.fill();
+    ctx.strokeStyle = L.stroke; ctx.lineWidth = 1; ctx.stroke();
+
+    ctx.beginPath();
+    quad(0, 0, W, D, dy);
+    if (L.frame) quad(17, 17, W - 17, D - 17, dy);
+    ctx.fillStyle = L.fill;
+    ctx.fill(L.frame ? 'evenodd' : 'nonzero');
+    ctx.lineWidth = L.frame ? 1.6 : 1.1;
+    ctx.stroke();
+
+    if (L.cells) {
+      const cu = W / 10, cw = D / 6, g = 3.5;
+      ctx.fillStyle = '#191A23'; ctx.strokeStyle = 'rgba(239,239,239,.26)'; ctx.lineWidth = .9;
+      for (let i = 0; i < 10; i++) for (let j = 0; j < 6; j++) {
+        ctx.beginPath();
+        quad(i*cu + g, j*cw + g, (i+1)*cu - g, (j+1)*cw - g, dy);
+        ctx.fill(); ctx.stroke();
+      }
+    }
+
+    if (L.ribbons) {
+      ctx.strokeStyle = 'rgba(239,239,239,.55)'; ctx.lineWidth = 1.8;
+      for (let i = 0; i <= 10; i++) {
+        const a = P(i*W/10, 0, dy), z = P(i*W/10, D, dy);
+        ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(z[0],z[1]); ctx.stroke();
+      }
+    }
+  }
+
+  function callout(L, t, alpha) {
+    const b = P(W, 0, L.k * V.EXP * t);
+    ctx.globalAlpha = alpha;
+    ctx.strokeStyle = 'rgba(239,239,239,.26)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(b[0] + 14, b[1]); ctx.lineTo(V.OX + 446, b[1]); ctx.stroke();
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = '#EFEFEF';
+    ctx.font = '600 26px Archivo, "Helvetica Neue", Arial, sans-serif';
+    ctx.fillText(L.sym, V.OX + 460, b[1] - 5);
+    ctx.fillStyle = 'rgba(239,239,239,.46)';
+    ctx.font = '500 13px Archivo, "Helvetica Neue", Arial, sans-serif';
+    ctx.letterSpacing = '1.6px';
+    ctx.fillText(L.name, V.OX + 460, b[1] + 17);
+    ctx.letterSpacing = '0px';
+    ctx.globalAlpha = 1;
+  }
+
+  let cur = reduce ? 1 : 0;
+
+  function draw(t) {
+    if (!cv.width) return;
+    const s = cv.width / V.LW;
+    ctx.setTransform(s, 0, 0, s, 0, 0);
+    ctx.clearRect(0, 0, V.LW, cv.height / s);
+    layers.forEach(L => plane(L, t));
+    if (!V.labels) return;
+    const a = Math.max(0, Math.min(1, (t - .55) / .45));
+    if (a > 0) layers.forEach(L => callout(L, t, a));
+  }
+
+  function resize() {
+    const r = cv.getBoundingClientRect();
+    if (!r.width) return;
+    V = r.width < 700 ? NARROW : WIDE;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width  = Math.round(r.width  * dpr);
+    cv.height = Math.round(r.height * dpr);
+    draw(cur);
+  }
+
+  new ResizeObserver(resize).observe(cv);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => draw(cur));
+
+  if (!reduce) {
+    const t0 = performance.now();
+    requestAnimationFrame(function frame(now) {
+      const p = Math.min(1, (now - t0) / 1500);
+      cur = 1 - Math.pow(1 - p, 4);
+      draw(cur);
+      if (p < 1) requestAnimationFrame(frame);
+    });
+  }
+})();
+</script>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40" role="img" aria-label="Solare Source">
+  <title>Solare Source, Cell mark</title>
+  <g fill="currentColor">
+    <rect x="7"  y="1"  width="7" height="7"/><rect x="15" y="1"  width="7" height="7"/>
+    <rect x="23" y="1"  width="7" height="7"/><rect x="31" y="1"  width="7" height="7"/>
+    <rect x="4"  y="15" width="7" height="7"/><rect x="12" y="15" width="7" height="7"/>
+    <rect x="20" y="15" width="7" height="7"/><rect x="28" y="15" width="7" height="7"/>
+    <rect x="4"  y="23" width="7" height="7"/><rect x="12" y="23" width="7" height="7"/>
+    <rect x="20" y="23" width="7" height="7"/><rect x="28" y="23" width="7" height="7"/>
+    <rect x="4"  y="31" width="7" height="7"/><rect x="12" y="31" width="7" height="7"/>
+    <rect x="20" y="31" width="7" height="7"/><rect x="28" y="31" width="7" height="7"/>
+  </g>
+</svg>

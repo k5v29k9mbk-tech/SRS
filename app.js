@@ -48,18 +48,6 @@ if ('IntersectionObserver' in window && !reducedMotion.matches) {
   }), { threshold: .08 });
   document.querySelectorAll('.reveal').forEach(el => { el.classList.add('pending'); observer.observe(el); });
 }
-const motionButton = $('#motion-toggle');
-let paused = reducedMotion.matches;
-function syncMotion() {
-  document.body.classList.toggle('motion-paused', paused);
-  motionButton.setAttribute('aria-pressed', String(paused));
-  motionButton.setAttribute('aria-label', paused ? 'Play background animation' : 'Pause background animation');
-  motionButton.firstElementChild.textContent = paused ? '▷' : 'Ⅱ';
-  motionButton.hidden = reducedMotion.matches;
-}
-motionButton.addEventListener('click', () => { paused = !paused; syncMotion(); });
-reducedMotion.addEventListener('change', () => { paused = reducedMotion.matches; syncMotion(); });
-syncMotion();
 const track = $('#story-track');
 const previous = $('#prev-story');
 const next = $('#next-story');

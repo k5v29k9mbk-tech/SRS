@@ -108,11 +108,14 @@ $('#enquiry-form').addEventListener('submit', event => {
   const form = event.currentTarget;
   if (!form.reportValidity()) return;
   const data = new FormData(form);
-  const body = `Hello Solare Source,\n\nI'd like to enquire about a solar panel collection.\n\nName: ${data.get('name')}\nEmail: ${data.get('email')}\nCollection location: ${data.get('location')}\nApproximate panel count: ${data.get('panels')}\n\nAdditional details:\n${data.get('notes') || 'None provided'}\n\nThank you.`;
-  const url = `mailto:info@srcorp.com.au?subject=${encodeURIComponent('Solar panel collection enquiry')}&body=${encodeURIComponent(body)}`;
+  const body = `Hello SolaRe Source,\n\nI'd like to enquire about a solar panel collection.\n\nName: ${data.get('name')}\nEmail: ${data.get('email')}\nCollection location: ${data.get('location')}\nApproximate panel count: ${data.get('panels')}\n\nAdditional details:\n${data.get('notes') || 'None provided'}\n\nThank you.`;
+  const url = `mailto:info@solare-source.au?subject=${encodeURIComponent('Solar panel collection enquiry')}&body=${encodeURIComponent(body)}`;
   const retry = $('#email-retry');
   retry.href = url; retry.hidden = false;
   $('#form-status').textContent = 'Your enquiry is ready. Send it from your email app to complete your request. If an email app did not open, use the link below or call +61 477 254 152.';
   window.location.href = url;
 });
 $('#year').textContent = new Date().getFullYear();
+
+// ponytail: reduced-motion users get the poster frame, not a looping hero
+if (reducedMotion.matches) $('[data-hero]')?.pause();

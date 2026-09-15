@@ -1,4 +1,4 @@
-# Solare Source
+# SolaRe Source
 
 Static, responsive website. No build step or runtime dependencies.
 
@@ -23,7 +23,7 @@ The enquiry form validates fields and prepares a `mailto:` draft. The visitor mu
 
 ## Design and content
 
-The layout adapts Palantir's homepage as inspected on 13 September 2026: full-screen hero, floating navigation, centered display type, large editorial sections and material rows. It is not a pixel-identical copy: Solare Source content, local solar imagery, an animated photograph and Archivo replace Palantir's content, reel and licensed Alliance typography.
+The layout adapts Palantir's homepage as inspected on 13 September 2026: full-screen hero, floating navigation, centered display type, large editorial sections and material rows. It is not a pixel-identical copy: SolaRe Source content, local solar imagery, an animated photograph and Archivo replace Palantir's content, reel and licensed Alliance typography.
 
 Business copy and contact details were carried forward or adapted from this repository. The supplied logo was reconstructed as SVG; the original artwork is not embedded. The archived website is kept under `archive/`. The four earlier mark explorations were retired and live in git history at commit 526a9d4.
 
